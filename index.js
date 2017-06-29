@@ -7,6 +7,7 @@ var data = [];
 function inspectFile(contents) {
     var $ = cheerio.load(contents);
     var regex = new RegExp(/season \d+ - episode \d+/gi);
+    var regexNum = new RegExp(/(\d+)/gi);
     var fileData = [];
     
     if ($('body').find('iframe').attr('src')) {
@@ -16,12 +17,29 @@ function inspectFile(contents) {
     $('body').find('b').filter(function() {
         if (regex.test($(this).text())) {
             fileData.push($(this).text());
+            
+            // Extract the season and episode numbers.
+            var results;
+            while((results = regexNum.exec($(this).text())) !== null) {
+                fileData.push(results[0]);
+            }
         }
     });
     
     if (fileData.length) {
         data.push(fileData);
     }
+}
+
+function sortData() {
+    // Remove any elements that don't have complete data.
+    data.forEach(function(el, i) {
+        if(el.length !== 4) {
+            data.splice(i, 1);
+        }
+    });
+    
+    
 }
 
 function buildHtml() {
@@ -42,6 +60,7 @@ files.forEach(function(file) {
     inspectFile(fs.readFileSync('seinfeld-files/' + file));
 });
 
+sortData();
 console.log(data);
 
 fs.writeFile("test.html", buildHtml(), function(err) {
