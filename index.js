@@ -60,12 +60,19 @@ function sortData() {
 }
 
 function buildHtml() {
+    var episodes = '';
+    
+    data.forEach(function(el, i) {
+        episodes += '<li><h2>' + el[1] + '</h2><a href="' + el[0] + '">Link</a></li>';
+    });
+    
     return  '<!DOCTYPE html>' +
             '<html lang="en">' +
             '<head>' +
                 '<meta charset="UTF-8">' +
                 '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
                 '<title>Seinfeld Episode links</title>' + 
+                '<ul>' + episodes + '</ul>' +
             '</head>' +
             '<body>' +
             '<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>' +
