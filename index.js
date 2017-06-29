@@ -1,23 +1,36 @@
 var fs = require('fs');
-
-/* Search through files: https://stackoverflow.com/questions/6959462/in-node-js-reading-a-directory-of-html-files-and-searching-for-element-attribu */
+var files = fs.readdirSync('seinfeld-files');
+var data = [];
 
 function inspectFile(contents) {
     if (contents.indexOf('<iframe') != -1) {
-        console.log('found');
+        data.push(['abc', 'def']);
     }
 }
 
-var files = fs.readdirSync('seinfeld-files');
+function buildHtml() {
+    return  '<!DOCTYPE html>' +
+            '<html lang="en">' +
+            '<head>' +
+                '<meta charset="UTF-8">' +
+                '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+                '<title>Seinfeld Episode links</title>' + 
+            '</head>' +
+            '<body>' +
+            '<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>' +
+            '</body>' +
+            '</html>';
+}
 
 files.forEach(function(file) { 
     inspectFile(fs.readFileSync('seinfeld-files/' + file));
 });
 
-fs.writeFile("test.txt", "Hey there!", function(err) {
+console.log(data);
+
+fs.writeFile("test.html", buildHtml(), function(err) {
     if(err) {
         return console.log(err);
     }
-
     console.log("The file was saved!");
 });
