@@ -21,7 +21,7 @@ function inspectFile(contents) {
             // Extract the season and episode numbers.
             var results;
             while((results = regexNum.exec($(this).text())) !== null) {
-                fileData.push(results[0]);
+                fileData.push(Number(results[0]));
             }
         }
     });
@@ -39,7 +39,24 @@ function sortData() {
         }
     });
     
-    
+    data.sort(function(a, b) {
+        var valueA = a[2];
+        var valueB = b[2];
+        
+        // If the same season, check episode number.
+        if (valueA === valueB) {
+            valueA = a[3];
+            valueB = b[3];
+        }
+        
+        if (valueA < valueB) {
+            return -1;
+        }
+        else if (valueA > valueB) {
+            return 1;
+        }
+        return 0;
+    });
 }
 
 function buildHtml() {
