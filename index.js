@@ -1,10 +1,26 @@
 var fs = require('fs');
+var cheerio = require('cheerio');
+
 var files = fs.readdirSync('seinfeld-files');
 var data = [];
 
 function inspectFile(contents) {
-    if (contents.indexOf('<iframe') != -1) {
-        data.push(['abc', 'def']);
+    var $ = cheerio.load(contents);
+    var regex = new RegExp(/season \d+ - episode \d+/gi);
+    var fileData = [];
+    
+    if ($('body').find('iframe').attr('src')) {
+        fileData.push($('body').find('iframe').attr('src'));
+    }
+    
+    $('body').find('b').filter(function() {
+        if (regex.test($(this).text())) {
+            fileData.push($(this).text());
+        }
+    });
+    
+    if (fileData.length) {
+        data.push(fileData);
     }
 }
 
