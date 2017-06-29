@@ -26,19 +26,13 @@ function inspectFile(contents) {
         }
     });
     
-    if (fileData.length) {
+    // Only include elements that have complete data.
+    if (fileData.length === 4) {
         data.push(fileData);
     }
 }
 
 function sortData() {
-    // Remove any elements that don't have complete data.
-    data.forEach(function(el, i) {
-        if(el.length !== 4) {
-            data.splice(i, 1);
-        }
-    });
-    
     data.sort(function(a, b) {
         var valueA = a[2];
         var valueB = b[2];
@@ -72,9 +66,9 @@ function buildHtml() {
                 '<meta charset="UTF-8">' +
                 '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
                 '<title>Seinfeld Episode links</title>' + 
-                '<ul>' + episodes + '</ul>' +
             '</head>' +
             '<body>' +
+                '<ul>' + episodes + '</ul>' +
             '<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>' +
             '</body>' +
             '</html>';
@@ -87,7 +81,7 @@ files.forEach(function(file) {
 sortData();
 console.log(data);
 
-fs.writeFile("test.html", buildHtml(), function(err) {
+fs.writeFile("seinfeld.html", buildHtml(), function(err) {
     if(err) {
         return console.log(err);
     }
